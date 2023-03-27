@@ -1,0 +1,2 @@
+# Patreon Supporter Fetcher
+ This repository contains a minimalistic web application that fetches and displays a list of Patreon supporters sorted by their membership tiers. The application is built using JavaScript, Express.js, and the Patreon API, and the website is hosted on GitHub Pages. The website consists of a simple landing page, a privacy policy page, and a terms of service page.  Please note that this application is designed for demonstration purposes and should be further modified and secured before deploying it in a production environment.
