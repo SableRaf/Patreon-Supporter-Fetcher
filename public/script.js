@@ -1,19 +1,28 @@
 async function fetchSupporters() {
   try {
     const response = await fetch("/fetch-supporters");
-    const data = await response.json();
+    const { members, users } = await response.json();
 
-    if (data.errors) {
-      console.error("Error fetching supporters:", data.errors);
+    if (members.errors) {
+      console.error("Error fetching supporters:", members.errors);
       return;
     }
 
-    const supporters = data.included
-      .filter((item) => item.type === "user")
-      .map((user) => ({
-        id: user.id,
-        name: user.attributes.full_name,
-      }));
+    if (users.errors) {
+      console.error("Error fetching users:", users.errors);
+      return;
+    }
+
+    // Map member IDs to user full names
+    const userIdToName = users.reduce((acc, user) => {
+      acc[user.id] = user.attributes.full_name;
+      return acc;
+    }, {});
+
+    const supporters = members.map((member) => ({
+      id: member.id,
+      name: userIdToName[member.relationships.user.data.id] || "Unnamed Patron",
+    }));
 
     displaySupporters(supporters);
   } catch (error) {
