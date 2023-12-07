@@ -12,12 +12,17 @@ app.use(express.static("public")); // Serve your HTML/JS files
 
 app.get("/fetch-supporters", async (req, res) => {
   const accessToken = "B64wlAW7BTql9LUL1U0T_FgyRSC2vXz80RdcsHbFsoQ"; // Replace with your actual access token
-  const url = new URL("https://www.patreon.com/api/oauth2/v2/campaigns");
+  const campaignId = "6979978"; // Replace with your actual Campaign ID
 
-  // Add query parameters
+  const url = new URL(
+    `https://www.patreon.com/api/oauth2/v2/campaigns/${campaignId}/members`
+  );
+
+  // Add query parameters for members
   const params = {
-    include: "tiers,creator", // Adjust according to valid relationships
-    "fields[user]": "full_name", // Ensure this field is valid for the user resource
+    "fields[member]": "full_name,patron_status",
+    "fields[user]": "full_name,email", // Make sure you have the necessary permissions to access email
+    include: "user", // Include user details of the members
   };
 
   Object.keys(params).forEach((key) =>
