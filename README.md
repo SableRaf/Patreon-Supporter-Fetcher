@@ -1,2 +1,22 @@
-# Patreon Supporter Fetcher
- This repository contains a minimalistic web application that fetches and displays a list of Patreon supporters sorted by their membership tiers. The application is built using JavaScript and the Patreon API. The website consists of a simple landing page, a supporters page, a privacy policy page, and a terms of service page. Please note that this application is designed for demonstration purposes and should be further modified and secured before deploying it in a production environment.
+
+## Patreon Fetcher
+This is a simple script to fetch your Patreon data using the Patreon API. It retrieves your campaigns and members, and saves the data in JSON format.
+
+## Test the Patreon API
+The following examples show how to test the Patreon API using `curl`. 
+
+### List all your campaigns
+```
+curl -H "Authorization: Bearer <ACCESS_TOKEN>" \
+  "https://www.patreon.com/api/oauth2/v2/campaigns"
+```
+
+### List all your members
+```
+curl -G \
+  -H "Authorization: Bearer <ACCESS_TOKEN>" \
+  --data-urlencode "include=currently_entitled_tiers" \
+  --data-urlencode "fields[member]=full_name,email" \
+  --data-urlencode "fields[tier]=title" \
+  "https://www.patreon.com/api/oauth2/v2/campaigns/<CAMPAIGN_ID>/members"
+```

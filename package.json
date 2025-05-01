@@ -1,24 +1,16 @@
 {
-  "name": "patreon-supporters",
+  "name": "patreon-supporter-fetcher",
   "version": "1.0.0",
-  "description": "Minimalistic web application that fetches and displays a list of Patreon supporters",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "express": "^4.18.2",
-    "patreon": "^0.4.1"
-  },
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SableRaf/Patreon-Supporter-Fetcher.git"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/SableRaf/Patreon-Supporter-Fetcher/issues"
-  },
-  "homepage": "https://github.com/SableRaf/Patreon-Supporter-Fetcher#readme"
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "node-fetch": "^2.7.0"
+  }
 }
