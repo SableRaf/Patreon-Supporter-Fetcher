@@ -11,8 +11,9 @@ This is a simple script to fetch your Patreon data using the Patreon API. It ret
    ```
    The response will include your campaign ID, for example:
    ```json
-   {"data":[{"attributes":{},"id":<YOUR_CAMPAIGN_ID>,"type":"campaign"}],"meta":{"pagination":{"cursors":{"next":null},"total":1}}}
+   {"data":[{"attributes":{},"id":1234567,"type":"campaign"}],"meta":{"pagination":{"cursors":{"next":null},"total":1}}}
    ```
+    In this example, the campaign ID is `1234567`.
 4. Create a `.env` file in the project root with the following content:
    ```
    PATREON_ACCESS_TOKEN=your_access_token_here
