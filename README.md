@@ -1,17 +1,28 @@
-
 ## Patreon Fetcher
 This is a simple script to fetch your Patreon data using the Patreon API. It retrieves your campaigns and members, and saves the data in JSON format.
 
+## Getting Started
+1. Log in to your Patreon account and create a new application at [Patreon Developer](https://www.patreon.com/portal/registration/register-clients).
+2. Retrieve your access token from the new client you just created.
+3. Obtain your campaign ID by running the following command in your terminal:
+   ```
+   curl -H "Authorization: Bearer <ACCESS_TOKEN>" \
+     "https://www.patreon.com/api/oauth2/v2/campaigns"
+   ```
+   The response will include your campaign ID, for example:
+   ```json
+   {"data":[{"attributes":{},"id":<YOUR_CAMPAIGN_ID>,"type":"campaign"}],"meta":{"pagination":{"cursors":{"next":null},"total":1}}}
+   ```
+4. Create a `.env` file in the project root with the following content:
+   ```
+   PATREON_ACCESS_TOKEN=your_access_token_here
+   PATREON_CAMPAIGN_ID=your_campaign_id_here
+   ```
+
 ## Test the Patreon API
-The following examples show how to test the Patreon API using `curl`. 
 
-### List all your campaigns
-```
-curl -H "Authorization: Bearer <ACCESS_TOKEN>" \
-  "https://www.patreon.com/api/oauth2/v2/campaigns"
-```
+To check if your access token and campaign ID are valid, you can use the following command:
 
-### List all your members
 ```
 curl -G \
   -H "Authorization: Bearer <ACCESS_TOKEN>" \
@@ -20,3 +31,4 @@ curl -G \
   --data-urlencode "fields[tier]=title" \
   "https://www.patreon.com/api/oauth2/v2/campaigns/<CAMPAIGN_ID>/members"
 ```
+This command will return a list of members and their details. 
