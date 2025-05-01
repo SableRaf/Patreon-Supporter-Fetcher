@@ -6,7 +6,7 @@ const fs = require('fs'); // Ensure fs is imported
 const ACCESS_TOKEN = process.env.PATREON_ACCESS_TOKEN;
 const CAMPAIGN_ID   = process.env.PATREON_CAMPAIGN_ID;
 
-console.log('Using campaign ID:', process.env.PATREON_CAMPAIGN_ID);
+console.log(`Fetching members for campaign ID:${process.env.PATREON_CAMPAIGN_ID}...`);
 
 // Fetch one page of members, return combined data + next cursor
 async function fetchMembersPage(cursor = null) {
