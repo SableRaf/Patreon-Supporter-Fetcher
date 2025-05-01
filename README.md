@@ -18,6 +18,21 @@ This is a simple script to fetch your Patreon data using the Patreon API. It ret
    PATREON_ACCESS_TOKEN=your_access_token_here
    PATREON_CAMPAIGN_ID=your_campaign_id_here
    ```
+5. Install the required Node dependencies:
+
+    ```
+    npm install
+    ```   
+
+## Running the Script
+
+To run the script, use the following command:
+
+```
+node index.js
+```
+
+This will fetch your campaigns and members from the Patreon API and save them in JSON format as `members.json`.
 
 ## Test the Patreon API
 
