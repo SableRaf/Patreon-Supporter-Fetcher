@@ -66,7 +66,7 @@ async function getAllMembers(cursor = null, acc = []) {
     console.table(patrons);
 
     // Save results to a JSON file
-    fs.writeFileSync('results.json', JSON.stringify(patrons, null, 2), 'utf-8');
+    fs.writeFileSync('members.json', JSON.stringify(patrons, null, 2), 'utf-8');
   } catch (err) {
     console.error(err);
   }
