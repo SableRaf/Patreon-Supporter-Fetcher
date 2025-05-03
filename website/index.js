@@ -6,6 +6,8 @@ const padding = bannerHeight * paddingFactor; // Calculate padding dynamically
 document.documentElement.style.setProperty('--banner-height', `${bannerHeight}px`);
 document.documentElement.style.setProperty('--member-padding', `${padding}px`); // Set CSS variable for padding
 
+const imgDir = `img`;
+
 let members = [];
 let lastTime = performance.now();
 const container = document.getElementById("members");
@@ -48,12 +50,27 @@ class Member {
   }
 }
 
+async function getDataDir() {
+  try {
+    const response = await fetch('/data/members.json', { method: 'HEAD' });
+    return response.ok ? '/data' : '/dummy-data';
+  } catch {
+    return '/dummy-data';
+  }
+}
+
+let dataDir;
+(async () => {
+  dataDir = await getDataDir();
+  setup(); // Call setup after determining the correct data directory
+})();
+
 async function setup() {
   container.style.width = `${window.innerWidth}px`;
   container.style.height = `${bannerHeight}px`;
 
   try {
-    const response = await fetch("data/members.json");
+    const response = await fetch(`${dataDir}/members.json`);
     const data = await response.json();
 
     const filteredData = data.filter(member => member.tier !== "Free");
@@ -62,11 +79,28 @@ async function setup() {
     members = filteredData
       .filter(member => member.thumbnailFileName)
       .map(member => {
-        const imgSrc = `data/img/${member.thumbnailFileName}`;
+        const imgSrc = `${dataDir}/${imgDir}/${member.thumbnailFileName}`;
         const newMember = new Member(member.name, imgSrc, xPosition);
         xPosition += newMember.width + padding; // Add padding between members
         return newMember;
       });
+
+    const totalWidth = members.reduce((sum, member) => sum + member.width + padding, 0);
+    const largestMemberWidth = Math.max(...members.map(member => member.width));
+
+    // Duplicate members only if the total width is less than the container width
+    if (totalWidth < window.innerWidth) {
+      const originalMembers = [...members];
+      while (xPosition < window.innerWidth) {
+        for (const member of originalMembers) {
+          const duplicateMember = new Member(member.name, member.element.querySelector("img").src, xPosition);
+          xPosition += duplicateMember.width + padding;
+          members.push(duplicateMember);
+
+          if (xPosition - largestMemberWidth >= window.innerWidth) break; // Stop duplicating once the banner is filled
+        }
+      }
+    }
 
     if (members.length === 0) {
       console.warn("No members were loaded. Check the image paths or members.json file.");
@@ -96,4 +130,4 @@ window.addEventListener("resize", () => {
   }, 200);
 });
 
-window.onload = setup;
+window.onload = null; // Remove the direct call to setup
