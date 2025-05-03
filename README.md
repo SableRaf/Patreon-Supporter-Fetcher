@@ -37,9 +37,10 @@ Unlike `patreon-banner`, this project doesn't use OAuth2.0 but downloads the mem
 > Replace `your_access_token_here` and `your_campaign_id_here` with the values you obtained in the previous steps.
 
 ### 2. Install Dependencies
-    ```
-    npm install
-    ```   
+
+```
+npm install
+```   
 
 ### 4. Fetch Members Data
 
