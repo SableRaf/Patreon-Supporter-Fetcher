@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patreon Members</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .tier {
+      margin-bottom: 20px;
+    }
+    .tier h2 {
+      margin-bottom: 10px;
+    }
+    .member {
+      margin-left: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .member img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Thanks patrons!</h1>
+  <div id="members"></div>
+
+  <script>
+    // Fetch members.json and display members by tier (excluding "Free")
+    fetch('members.json')
+      .then(response => response.json())
+      .then(members => {
+        const tiers = {};
+
+        // Group members by tier, ignoring "Free"
+        members.forEach(member => {
+          if (member.tier !== "Free") {
+            if (!tiers[member.tier]) {
+              tiers[member.tier] = [];
+            }
+            tiers[member.tier].push(member);
+          }
+        });
+
+        const membersDiv = document.getElementById('members');
+
+        // Render members grouped by tier
+        Object.keys(tiers).forEach(tier => {
+          const tierDiv = document.createElement('div');
+          tierDiv.className = 'tier';
+
+          const tierTitle = document.createElement('h2');
+          tierTitle.textContent = tier;
+          tierDiv.appendChild(tierTitle);
+
+          tiers[tier].forEach(member => {
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'member';
+
+            const memberImg = document.createElement('img');
+            memberImg.src = member.imageUrl || '';
+            memberImg.alt = `${member.name}'s profile picture`;
+
+            const memberName = document.createElement('span');
+            memberName.textContent = member.name;
+
+            memberDiv.appendChild(memberImg);
+            memberDiv.appendChild(memberName);
+            tierDiv.appendChild(memberDiv);
+          });
+
+          membersDiv.appendChild(tierDiv);
+        });
+      })
+      .catch(error => console.error('Error loading members:', error));
+  </script>
+</body>
+</html>
