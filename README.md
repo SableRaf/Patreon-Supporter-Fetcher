@@ -67,7 +67,10 @@ This script will:
 
 #### Deploy to Netlify
 
-TBD
+1. Create a new site on Netlify and link it to your GitHub repository.
+2. Set the build command to `npm run build` and the publish directory to `app`.
+3. Add PATREON_ACCESS_TOKEN and PATREON_CAMPAIGN_ID as environment variables in your Netlify settings.
+4. Deploy the site.
 
 ## Troubleshooting
 
