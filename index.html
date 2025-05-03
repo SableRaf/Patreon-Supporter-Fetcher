@@ -4,13 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Patreon Members</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.0.1/lib/p5.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
+      padding: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
     }
     .tier {
-      margin-bottom: 20px;
+      margin-top: 150px; /* Push content below the banner */
     }
     .tier h2 {
       margin-bottom: 10px;
@@ -30,57 +40,128 @@
   </style>
 </head>
 <body>
-  <h1>Thanks patrons!</h1>
+
   <div id="members"></div>
 
   <script>
-    // Fetch members.json and display members by tier (excluding "Free")
-    fetch('members.json')
-      .then(response => response.json())
-      .then(members => {
-        const tiers = {};
+    class Member {
+      constructor(name, img, x) {
+        this.name = name;
+        this.img = img; // Pre-masked image
+        this.x = x; // Initial x position
+        this.imageSize = 50; // Fixed size for the image
+        this.spacing = 10; // Space between image and text
+        this.padding = 15; // Padding on the left and right
+        this.width = this.calculateWidth(); // Total width of the member
+      }
 
-        // Group members by tier, ignoring "Free"
-        members.forEach(member => {
-          if (member.tier !== "Free") {
-            if (!tiers[member.tier]) {
-              tiers[member.tier] = [];
+      calculateWidth() {
+        textSize(16);
+        return this.padding + this.imageSize + this.spacing + textWidth(this.name) + this.padding; // Padding + image + spacing + text + padding
+      }
+
+      display(centerY) {
+        // Draw the masked image
+        image(this.img, this.x + this.padding, centerY - this.imageSize / 2);
+
+        // Draw the name
+        textSize(16);
+        fill(0);
+        text(this.name, this.x + this.padding + this.imageSize + this.spacing, centerY + 5);
+      }
+
+      update(scrollSpeed, totalWidth) {
+        // Move the member to the left based on deltaTime
+        this.x -= (scrollSpeed * deltaTime) / 1000;
+
+        // If the member has scrolled out of the screen, wrap it to the end
+        if (this.x < -this.width) {
+          this.x += totalWidth;
+        }
+      }
+    }
+
+    let members = [];
+    let scrollSpeed = 600; // Pixels per second
+    let bannerHeight = 50;
+
+    async function setup() {
+      console.log('Setup function called');
+      createCanvas(windowWidth, bannerHeight);
+      console.log('Canvas created');
+
+      try {
+        // Fetch members.json
+        console.log('Fetching members.json...');
+        const response = await fetch('data/members.json'); // Use the correct path to members.json
+        const data = await response.json();
+        console.log('Members data fetched:', data);
+
+        // Filter out "Free" tier members
+        const filteredMembers = data.filter(member => member.tier !== "Free");
+        console.log('Filtered members:', filteredMembers);
+
+        // Load images asynchronously from local files and create Member instances
+        let xPosition = 0;
+        for (const member of filteredMembers) {
+          if (member.thumbnailFileName) { // Ensure thumbnailFileName is not null
+            try {
+              const img = await loadImageAsync(`data/img/${member.thumbnailFileName}`);
+              const maskedImg = createGraphics(50, 50);
+              maskedImg.circle(25, 25, 45); // Draw a circular mask
+              maskedImg.drawingContext.globalCompositeOperation = 'source-in';
+              maskedImg.image(img, 0, 0, 50, 50); // Apply the mask to the image
+              const newMember = new Member(member.name, maskedImg, xPosition);
+              members.push(newMember);
+              xPosition += newMember.width; // Increment xPosition for the next member
+              console.log(`Member created for: ${member.name}`);
+            } catch (error) {
+              console.error(`Error loading image for member: ${member.name}`, error);
             }
-            tiers[member.tier].push(member);
+          } else {
+            console.warn(`No thumbnail available for member: ${member.name}`);
           }
+        }
+
+        if (members.length === 0) {
+          console.warn('No members were loaded. Check the image paths or members.json file.');
+        }
+      } catch (error) {
+        console.error('Error loading members or images:', error);
+      }
+    }
+
+    function draw() {
+      background(244);
+
+      // Only draw if members are loaded
+      if (members.length > 0) {
+        const centerY = height / 2; // Calculate vertical center
+        const totalWidth = members.reduce((sum, member) => sum + member.width, 0);
+
+        members.forEach(member => {
+          member.update(scrollSpeed, totalWidth); // Update the member's position
+          member.display(centerY); // Display the member
         });
+      } else {
+        console.log('No members loaded yet');
+      }
+    }
 
-        const membersDiv = document.getElementById('members');
+    function windowResized() {
+      resizeCanvas(windowWidth, bannerHeight);
+    }
 
-        // Render members grouped by tier
-        Object.keys(tiers).forEach(tier => {
-          const tierDiv = document.createElement('div');
-          tierDiv.className = 'tier';
-
-          const tierTitle = document.createElement('h2');
-          tierTitle.textContent = tier;
-          tierDiv.appendChild(tierTitle);
-
-          tiers[tier].forEach(member => {
-            const memberDiv = document.createElement('div');
-            memberDiv.className = 'member';
-
-            const memberImg = document.createElement('img');
-            memberImg.src = member.imageUrl || '';
-            memberImg.alt = `${member.name}'s profile picture`;
-
-            const memberName = document.createElement('span');
-            memberName.textContent = member.name;
-
-            memberDiv.appendChild(memberImg);
-            memberDiv.appendChild(memberName);
-            tierDiv.appendChild(memberDiv);
-          });
-
-          membersDiv.appendChild(tierDiv);
-        });
-      })
-      .catch(error => console.error('Error loading members:', error));
+    // Helper function to load images with async/await
+    function loadImageAsync(url) {
+      return new Promise((resolve, reject) => {
+        if (!url) {
+          reject('Image URL is empty');
+          return;
+        }
+        loadImage(url, resolve, reject);
+      });
+    }
   </script>
 </body>
 </html>
