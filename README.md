@@ -63,6 +63,17 @@ This script will:
 1. Run `npm start` to start a local server. 
 2. Open `http://localhost:3000` in your browser to see the banner.
 
+## Banner Customization Parameters
+
+You can customize the banner's appearance and behavior by editing the following variables at the top of `app/index.js`:
+
+```javascript
+const scrollSpeed = 50; // Speed at which the banner scrolls (pixels per second)
+const bannerHeight = 42; // Height of the banner in pixels
+const paddingFactor = 0.15; // Padding as a factor of banner height
+const backgroundColor = 'rgba(179, 179, 179, 0.246)'; // Banner background color
+```
+
 #### Deploy to Netlify
 
 1. Create a new site on Netlify and link it to your GitHub repository.

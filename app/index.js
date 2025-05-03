@@ -1,10 +1,13 @@
 const scrollSpeed = 50;
 const bannerHeight = 42;
 const paddingFactor = 0.15; // Padding as a factor of banner height
+const backgroundColor = 'rgba(179, 179, 179, 0.246)'; // Set background color here
+
 const padding = bannerHeight * paddingFactor; // Calculate padding dynamically
 
 document.documentElement.style.setProperty('--banner-height', `${bannerHeight}px`);
 document.documentElement.style.setProperty('--member-padding', `${padding}px`); // Set CSS variable for padding
+document.documentElement.style.setProperty('--banner-bg', backgroundColor); // Set CSS variable for background color
 
 const imgDir = `img`;
 
