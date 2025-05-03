@@ -31,43 +31,31 @@ Unlike `patreon-banner`, this project doesn't use OAuth2.0 but downloads the mem
    {"data":[{"attributes":{},"id":1234567,"type":"campaign"}],"meta":{"pagination":{"cursors":{"next":null},"total":1}}}
    ```
   In this example, the campaign ID is `1234567`.
-4. Check if your access token and campaign ID are valid, using the following command:
-
-```
-curl -G \
-  -H "Authorization: Bearer <ACCESS_TOKEN>" \
-  --data-urlencode "include=currently_entitled_tiers" \
-  --data-urlencode "fields[member]=full_name,email" \
-  --data-urlencode "fields[tier]=title" \
-  "https://www.patreon.com/api/oauth2/v2/campaigns/<CAMPAIGN_ID>/members"
-```
 
 This command should return a list of members and their details. If you see an error message, double-check your access token and campaign ID.
 
-### 2. Set Up the Project
-
-4. Navigate to the `scripts` directory in your terminal:
-    ```
-    cd scripts
-    ```
-6. Create a `.env` file in the `scripts` directory with the following content:
-   ```
-   PATREON_ACCESS_TOKEN=your_access_token_here
-   PATREON_CAMPAIGN_ID=your_campaign_id_here
-   ```
-7. Install the required Node dependencies:
+### 2. Install Dependencies
+2. Install the required Node dependencies:
 
     ```
     npm install
     ```   
 
-### 3. Fetch Members Data
+### 3. Set Up the Project
+
+1. Create a `.env` file in the `config` directory with the following content:
+   ```
+   PATREON_ACCESS_TOKEN=your_access_token_here
+   PATREON_CAMPAIGN_ID=your_campaign_id_here
+   ```
+
+### 4. Fetch Members Data
 
 Run `npm run fetch`.
 
-This will fetch your campaigns and members from the Patreon API and save them in JSON format as `members.json` in the `website/data` folder (it will create one if it doesn't exist). The script also downloads the members' profile images and saves them in the `website/data/img` folder.
+This will fetch your campaigns and members from the Patreon API and save them in JSON format as `members.json` in the `app/data` folder (it will create one if it doesn't exist). The script also downloads the members' profile images and saves them in the `app/data/img` folder.
 
-### 4. Set Up the Banner in OBS
+### 5. Set Up the Banner in OBS
 
 #### Local Testing
 
@@ -85,3 +73,20 @@ This will fetch your campaigns and members from the Patreon API and save them in
 6. Click "Deploy site" to start the deployment process.
 7. Once the deployment is complete, you will receive a unique URL for your site.
 8. Copy the URL and paste it into your OBS Browser source settings.
+
+## Troubleshooting
+
+### Check That Your Access Token and Campaign ID are Valid
+
+To make sure your access token and campaign ID are valid, run the following command in your terminal:
+
+```
+curl -G \
+  -H "Authorization: Bearer <ACCESS_TOKEN>" \
+  --data-urlencode "include=currently_entitled_tiers" \
+  --data-urlencode "fields[member]=full_name,email" \
+  --data-urlencode "fields[tier]=title" \
+  "https://www.patreon.com/api/oauth2/v2/campaigns/<CAMPAIGN_ID>/members"
+```
+
+This command should return a list of members and their details. If you see an error message, double-check your access token and campaign ID.
