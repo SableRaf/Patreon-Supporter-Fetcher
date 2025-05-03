@@ -31,11 +31,12 @@ async function downloadImage(url, filePath) {
 }
 
 // https://www.patreon.com/portal/registration/register-clients
-const ACCESS_TOKEN = config.patreonAccessToken;
-const CAMPAIGN_ID = config.patreonCampaignId;
+// Prefer Netlify environment variables, fallback to config
+const ACCESS_TOKEN = process.env.PATREON_ACCESS_TOKEN || config.patreonAccessToken;
+const CAMPAIGN_ID = process.env.PATREON_CAMPAIGN_ID || config.patreonCampaignId;
 
-console.log("PATREON_ACCESS_TOKEN:", process.env.PATREON_ACCESS_TOKEN ? "Exists" : "Missing");
-console.log("PATREON_CAMPAIGN_ID:", process.env.PATREON_CAMPAIGN_ID ? "Exists" : "Missing");
+console.log("PATREON_ACCESS_TOKEN:", ACCESS_TOKEN ? "Exists" : "Missing");
+console.log("PATREON_CAMPAIGN_ID:", CAMPAIGN_ID ? "Exists" : "Missing");
 
 console.log(`Fetching members for campaign ID: ${CAMPAIGN_ID}...`);
 
