@@ -7,7 +7,7 @@ const { createWriteStream } = require('fs');
 const https = require('https');
 
 // Ensure /data and /data/img directories exist
-const dataDir = path.join(__dirname, '../data');
+const dataDir = path.join(__dirname, '../website/data');
 const imgDir = path.join(dataDir, 'img');
 mkdirSync(dataDir, { recursive: true });
 mkdirSync(imgDir, { recursive: true });
@@ -148,7 +148,11 @@ async function getAllMembers(cursor = null, acc = [], skipImages = false) {
 
     // Save results to a JSON file
     const outputFilePath = path.join(dataDir, 'members.json');
-    writeFileSync(outputFilePath, JSON.stringify(patrons, null, 2), 'utf-8');
+    const outputData = {
+      lastFetchDate: new Date().toISOString(), // Add the last fetch date
+      members: patrons
+    };
+    writeFileSync(outputFilePath, JSON.stringify(outputData, null, 2), 'utf-8');
     console.log(`Saved members data to ${outputFilePath}`);
   } catch (err) {
     console.error(err);
