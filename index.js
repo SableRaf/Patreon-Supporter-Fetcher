@@ -1,10 +1,14 @@
 const scrollSpeed = 50;
-const bannerHeight = 40;
+const bannerHeight = 42;
+const paddingFactor = 0.15; // Padding as a factor of banner height
+const padding = bannerHeight * paddingFactor; // Calculate padding dynamically
+
+document.documentElement.style.setProperty('--banner-height', `${bannerHeight}px`);
+document.documentElement.style.setProperty('--member-padding', `${padding}px`); // Set CSS variable for padding
+
 let members = [];
 let lastTime = performance.now();
 const container = document.getElementById("members");
-
-document.documentElement.style.setProperty('--banner-height', `${bannerHeight}px`);
 
 class Member {
   constructor(name, imgSrc, x) {
@@ -60,7 +64,7 @@ async function setup() {
       .map(member => {
         const imgSrc = `data/img/${member.thumbnailFileName}`;
         const newMember = new Member(member.name, imgSrc, xPosition);
-        xPosition += newMember.width;
+        xPosition += newMember.width + padding; // Add padding between members
         return newMember;
       });
 
@@ -78,7 +82,7 @@ function animate(time) {
   const dt = (time - lastTime) / 1000;
   lastTime = time;
 
-  const totalWidth = members.reduce((sum, member) => sum + member.width, 0);
+  const totalWidth = members.reduce((sum, member) => sum + member.width + padding, 0); // Include padding in totalWidth
   members.forEach(member => member.update(dt, totalWidth));
 
   requestAnimationFrame(animate);

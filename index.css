@@ -20,6 +20,7 @@ body {
   white-space: nowrap;
   display: flex;
   align-items: center;
+  margin-right: var(--member-padding); /* Use the CSS variable for padding */
 }
 .member img {
   width: calc(var(--banner-height, 50px) * 1); /* Image size proportional to banner height */
