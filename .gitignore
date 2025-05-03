@@ -1,7 +1,9 @@
 
 .DS_Store
-members.json
+/data/members.json
+/website/data
 /data
+
 
 # Logs
 logs
