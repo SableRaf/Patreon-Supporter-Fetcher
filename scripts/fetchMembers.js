@@ -34,6 +34,9 @@ async function downloadImage(url, filePath) {
 const ACCESS_TOKEN = config.patreonAccessToken;
 const CAMPAIGN_ID = config.patreonCampaignId;
 
+console.log("PATREON_ACCESS_TOKEN:", process.env.PATREON_ACCESS_TOKEN ? "Exists" : "Missing");
+console.log("PATREON_CAMPAIGN_ID:", process.env.PATREON_CAMPAIGN_ID ? "Exists" : "Missing");
+
 console.log(`Fetching members for campaign ID: ${CAMPAIGN_ID}...`);
 
 // Fetch one page of members, return combined data + next cursor
