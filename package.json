@@ -4,7 +4,6 @@
   "main": "fetchMembers.js",
   "scripts": {
     "fetch": "cd scripts && node fetchMembers.js",
-    "serve": "node server.js"
   },
   "keywords": [],
   "author": "",

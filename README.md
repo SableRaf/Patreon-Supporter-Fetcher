@@ -8,7 +8,15 @@ This project is inspired by the deprecated [patreon-banner](https://github.com/A
 
 Unlike [patreon-banner](https://github.com/AssistantApps/Patreon-Banner), this project doesn't use OAuth2.0 but downloads the members' data directly from the Patreon API using a personal access token. You will need to create a new application in your Patreon account and get an access token.
 
-## Setup Instructions
+## Quick Start Guide
+
+1. Get your access token and campaign ID from the [Patreon Portal](https://www.patreon.com/portal/registration/register-clients) .
+2. Create a `.env` file in the `config` directory with your access token and campaign ID.
+3. Install the necessary dependencies using `npm install`.
+4. Fetch your members' data by running `npm run fetch`.
+5. Start a local server with `npm start` and view the banner at `http://localhost:3000`.
+
+## Detailed Setup Instructions
 
 ### 0. Prerequisites
 - Node.js and npm
@@ -54,7 +62,7 @@ This script will:
 
 ## Local Testing
 
-1. Run `npm run serve` to start a local server. 
+1. Run `npm start` to start a local server. 
 2. Open `http://localhost:3000` in your browser to see the banner.
 
 #### Deploy to Netlify
