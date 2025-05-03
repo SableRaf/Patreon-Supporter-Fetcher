@@ -43,7 +43,9 @@ Unlike `patreon-banner`, this project doesn't use OAuth2.0 but downloads the mem
 
 ### 4. Fetch Members Data
 
-Run `npm run fetch`.
+```
+npm run fetch
+```
 
 This script will:
 - retrieve a list of members and save it as `members.json` in `app/data`
