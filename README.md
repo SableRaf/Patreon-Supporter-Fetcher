@@ -78,7 +78,10 @@ This will fetch your campaigns and members from the Patreon API and save them in
 
 ### Check That Your Access Token and Campaign ID are Valid
 
-To make sure your access token and campaign ID are valid, run the following command in your terminal:
+To make sure your access token and campaign ID are valid, run the following command in your terminal
+
+> [!NOTE]
+>  replace `<ACCESS_TOKEN>` and `<CAMPAIGN_ID>` with your actual access token and campaign ID.
 
 ```
 curl -G \
