@@ -1,12 +1,9 @@
 ## Patreon Banner
-This project includes two parts:
+![Patreon Banner](banner-screenshot.png)
 
-1. A Node.js script that fetches your Patreon members and their details.
-2. A website that displays the members' names in a banner format.
+This project is inspired by [patreon-banner](https://github.com/AssistantApps/Patreon-Banner) project by [Kurt Lourens](https://github.com/Khaoz-Topsy) (now deprecated).
 
-This project is inspired by the deprecated [patreon-banner](https://github.com/AssistantApps/Patreon-Banner) project by [Kurt Lourens](https://github.com/Khaoz-Topsy).
-
-Unlike [patreon-banner](https://github.com/AssistantApps/Patreon-Banner), this project doesn't use OAuth2.0 but downloads the members' data directly from the Patreon API using a personal access token. You will need to create a new application in your Patreon account and get an access token.
+Unlike [patreon-banner](https://github.com/AssistantApps/Patreon-Banner), this project doesn't use OAuth2.0 but downloads the members' data directly from the Patreon API using a personal access token. You will need to create a new application in your Patreon account and get an access token. 
 
 ## Quick Start Guide
 
@@ -14,7 +11,7 @@ Unlike [patreon-banner](https://github.com/AssistantApps/Patreon-Banner), this p
 2. Create a `.env` file in the `config` directory with your access token and campaign ID.
 3. Install the necessary dependencies using `npm install`.
 4. Fetch your members' data by running `npm run fetch`.
-5. Start a local server with `npm start` and view the banner at `http://localhost:3000`.
+5. Deploy to Netlify or run locally using `npm start`.
 
 ## Detailed Setup Instructions
 
