@@ -1,6 +1,33 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
 const fs = require('fs'); // Ensure fs is imported
+const path = require('path');
+const { mkdirSync, writeFileSync } = require('fs');
+const { createWriteStream } = require('fs');
+const https = require('https');
+
+// Ensure /data and /data/img directories exist
+const dataDir = path.join(__dirname, 'data');
+const imgDir = path.join(dataDir, 'img');
+mkdirSync(dataDir, { recursive: true });
+mkdirSync(imgDir, { recursive: true });
+
+// Download an image and save it locally
+async function downloadImage(url, filePath) {
+  return new Promise((resolve, reject) => {
+    const file = createWriteStream(filePath);
+    https.get(url, (response) => {
+      if (response.statusCode !== 200) {
+        reject(new Error(`Failed to download image: ${response.statusCode}`));
+        return;
+      }
+      response.pipe(file);
+      file.on('finish', () => file.close(resolve));
+    }).on('error', (err) => {
+      fs.unlink(filePath, () => reject(err));
+    });
+  });
+}
 
 // https://www.patreon.com/portal/registration/register-clients
 const ACCESS_TOKEN = process.env.PATREON_ACCESS_TOKEN;
@@ -27,7 +54,7 @@ async function fetchMembersPage(cursor = null) {
 }
 
 // Recursively page through all members
-async function getAllMembers(cursor = null, acc = []) {
+async function getAllMembers(cursor = null, acc = [], skipImages = false) {
   const json = await fetchMembersPage(cursor);
 
   // Build tier-ID → title map
@@ -39,7 +66,7 @@ async function getAllMembers(cursor = null, acc = []) {
     }, {});
 
   // Map each member to a flat object
-  const pageMembers = (json.data || []).map(member => {
+  const pageMembersPromises = (json.data || []).map(async (member) => {
     const tierIds = member.relationships.currently_entitled_tiers.data;
     const tierTitle = tierIds.length
       ? tierMap[tierIds[0].id] ?? 'Unknown'
@@ -49,11 +76,27 @@ async function getAllMembers(cursor = null, acc = []) {
       obj => obj.type === 'user' && obj.id === member.relationships.user.data.id
     );
 
+    const imageUrl = user?.attributes.image_url || null;
+    const userId = user?.id || 'unknown';
+    const localImageFileName = imageUrl ? `${userId}.jpg` : null;
+    const localImagePath = localImageFileName ? path.join(imgDir, localImageFileName) : null;
+
+    // Conditionally download the thumbnail image if it exists
+    if (!skipImages && imageUrl && localImagePath) {
+      try {
+        await downloadImage(imageUrl, localImagePath);
+        console.log(`Downloaded image for user: ${userId}`);
+      } catch (err) {
+        console.error(`Failed to download image for user: ${userId}`, err);
+      }
+    }
+
     return {
+      userID: userId,
       name: member.attributes.full_name,
       tier: tierTitle,
-      imageUrl: user?.attributes.image_url || null,
-      thumbnailUrl: user?.attributes.image_url || null,
+      imageUrl,
+      thumbnailFileName: skipImages ? null : localImageFileName,
       url: user?.attributes.url || null,
       joinedDate: member.attributes.pledge_relationship_start
         ? new Date(member.attributes.pledge_relationship_start)
@@ -61,10 +104,11 @@ async function getAllMembers(cursor = null, acc = []) {
     };
   });
 
+  const pageMembers = await Promise.all(pageMembersPromises);
   const all = acc.concat(pageMembers);
   const nextCursor = json.meta?.pagination?.cursors?.next;
   if (nextCursor) {
-    return getAllMembers(nextCursor, all);
+    return getAllMembers(nextCursor, all, skipImages);
   }
   return all;
 }
@@ -72,7 +116,8 @@ async function getAllMembers(cursor = null, acc = []) {
 // Example usage
 (async () => {
   try {
-    const patrons = await getAllMembers();
+    const skipImages = process.argv.includes('--skip-images'); // Check for optional argument
+    const patrons = await getAllMembers(null, [], skipImages);
     console.log(`Fetched ${patrons.length} patrons:`);
 
     // Separate free and non-free members
@@ -102,7 +147,9 @@ async function getAllMembers(cursor = null, acc = []) {
     );
 
     // Save results to a JSON file
-    fs.writeFileSync('members.json', JSON.stringify(patrons, null, 2), 'utf-8');
+    const outputFilePath = path.join(dataDir, 'members.json');
+    writeFileSync(outputFilePath, JSON.stringify(patrons, null, 2), 'utf-8');
+    console.log(`Saved members data to ${outputFilePath}`);
   } catch (err) {
     console.error(err);
   }
