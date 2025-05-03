@@ -8,11 +8,11 @@ Unlike [patreon-banner](https://github.com/AssistantApps/Patreon-Banner), this p
 
 ## Quick Start Guide
 
-1. Get your access token and campaign ID from the [Patreon Portal](https://www.patreon.com/portal/registration/register-clients) .
-2. Create a `.env` file in the `config` directory with your access token and campaign ID.
-3. Install the necessary dependencies using `npm install`.
-4. Fetch your members' data by running `npm run fetch`.
-5. Deploy to Netlify or run locally using `npm start`.
+1. Fork this repository to your GitHub account.
+1. Get your access token and campaign ID from the [Patreon Portal](https://www.patreon.com/portal/registration/register-clients).
+1. Create a site on Netlify and link it to your GitHub repository.
+1. Add your access token and campaign ID as environment variables in your Netlify settings.
+1. Deploy the site.
 
 ## Detailed Setup Instructions
 
