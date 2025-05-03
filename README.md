@@ -4,9 +4,9 @@ This project includes two parts:
 1. A Node.js script that fetches your Patreon members and their details.
 2. A website that displays the members' names in a banner format.
 
-This project is inspired by the deprecated https://github.com/AssistantApps/Patreon-Banner
+This project is inspired by the deprecated [patreon-banner](https://github.com/AssistantApps/Patreon-Banner) project by [Kurt Lourens](https://github.com/Khaoz-Topsy).
 
-Unlike `patreon-banner`, this project doesn't use OAuth2.0 but downloads the members' data directly from the Patreon API using a personal access token. You will need to create a new application in your Patreon account and get an access token.
+Unlike [patreon-banner](https://github.com/AssistantApps/Patreon-Banner), this project doesn't use OAuth2.0 but downloads the members' data directly from the Patreon API using a personal access token. You will need to create a new application in your Patreon account and get an access token.
 
 ## Setup Instructions
 
