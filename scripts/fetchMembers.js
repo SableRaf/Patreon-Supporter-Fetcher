@@ -114,7 +114,6 @@ async function getAllMembers(cursor = null, acc = [], skipImages = false) {
   return all;
 }
 
-// Example usage
 (async () => {
   try {
     const skipImages = process.argv.includes('--skip-images'); // Check for optional argument
