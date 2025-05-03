@@ -4,7 +4,8 @@
   "main": "fetchMembers.js",
   "scripts": {
     "fetch": "cd scripts && node fetchMembers.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "npm run fetch && echo 'Building site...' && npm start"
   },
   "keywords": [],
   "author": "",
