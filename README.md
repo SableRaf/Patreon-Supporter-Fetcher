@@ -63,7 +63,7 @@ This command should return a list of members and their details. If you see an er
 
 ### 3. Fetch Members Data
 
-Navigate to the `scripts` directory in your terminal and run `node fetchMembers.js`:
+Run `npm run fetch`.
 
 This will fetch your campaigns and members from the Patreon API and save them in JSON format as `members.json` in the `website/data` folder (it will create one if it doesn't exist). The script also downloads the members' profile images and saves them in the `website/data/img` folder.
 
@@ -71,17 +71,8 @@ This will fetch your campaigns and members from the Patreon API and save them in
 
 #### Local Testing
 
-
-1. Navigate to the `website` directory in your terminal:
-   ```
-   cd website
-   ```
-2. Serve the website locally using a simple HTTP server:
-   ```
-   npx http-server
-   ```
-3. Open your browser and navigate to `http://localhost:8080` to view the website.
-4. In OBS, add a new Browser source and set the URL to `http://localhost:8080`.
+1. Run `npm run serve` to start a local server. 
+2. In OBS, add a new Browser source and set the URL to `http://localhost:3000`.
 
 #### Deploy to Netlify
 1. Create a new repository on GitHub and push your project to it.

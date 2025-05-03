@@ -1,13 +1,14 @@
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '../config/.env') });
 const fetch = require('node-fetch');
 const fs = require('fs'); // Ensure fs is imported
 const path = require('path');
 const { mkdirSync, writeFileSync } = require('fs');
 const { createWriteStream } = require('fs');
 const https = require('https');
+const config = require('../config/config');
 
 // Ensure /data and /data/img directories exist
-const dataDir = path.join(__dirname, '../website/data');
+const dataDir = path.join(__dirname, '../app/data');
 const imgDir = path.join(dataDir, 'img');
 mkdirSync(dataDir, { recursive: true });
 mkdirSync(imgDir, { recursive: true });
@@ -30,10 +31,10 @@ async function downloadImage(url, filePath) {
 }
 
 // https://www.patreon.com/portal/registration/register-clients
-const ACCESS_TOKEN = process.env.PATREON_ACCESS_TOKEN;
-const CAMPAIGN_ID   = process.env.PATREON_CAMPAIGN_ID;
+const ACCESS_TOKEN = config.patreonAccessToken;
+const CAMPAIGN_ID = config.patreonCampaignId;
 
-console.log(`Fetching members for campaign ID:${process.env.PATREON_CAMPAIGN_ID}...`);
+console.log(`Fetching members for campaign ID: ${CAMPAIGN_ID}...`);
 
 // Fetch one page of members, return combined data + next cursor
 async function fetchMembersPage(cursor = null) {

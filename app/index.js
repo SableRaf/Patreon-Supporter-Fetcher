@@ -73,7 +73,7 @@ async function setup() {
     const response = await fetch(`${dataDir}/members.json`);
     const data = await response.json();
 
-    const filteredData = data.filter(member => member.tier !== "Free");
+    const filteredData = data.members.filter(member => member.tier !== "Free");
     let xPosition = 0;
 
     members = filteredData
