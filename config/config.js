@@ -5,8 +5,8 @@ const config = {
   port: process.env.PORT || 3000,
   patreonAccessToken: process.env.PATREON_ACCESS_TOKEN || '',
   patreonCampaignId: process.env.PATREON_CAMPAIGN_ID || '',
-  dataDir: path.join(__dirname, '../app/data'), // Add data directory
-  imgDir: path.join(__dirname, '../app/data/img') // Add image directory
+  dataDir: path.join(__dirname, '../app/data'),
+  imgDir: path.join(__dirname, '../app/data/img')
 };
 
 module.exports = config;
