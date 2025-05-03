@@ -4,6 +4,7 @@ const config = require('./config/config');
 
 const app = express();
 const PORT = config.port;
+const DATA_DIR = config.dataDir;
 
 // Debugging middleware to log incoming requests
 app.use((req, res, next) => {
@@ -11,9 +12,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// Serve static files from the "website" directory at root
 app.use(express.static(path.join(__dirname, 'app')));
-
+    
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -8,8 +8,8 @@ const https = require('https');
 const config = require('../config/config');
 
 // Ensure /data and /data/img directories exist
-const dataDir = path.join(__dirname, '../app/data');
-const imgDir = path.join(dataDir, 'img');
+const dataDir = config.dataDir;
+const imgDir = config.imgDir;
 mkdirSync(dataDir, { recursive: true });
 mkdirSync(imgDir, { recursive: true });
 
