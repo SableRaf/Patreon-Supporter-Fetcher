@@ -18,7 +18,7 @@ Unlike `patreon-banner`, this project doesn't use OAuth2.0 but downloads the mem
 ### 1. Get Your Access Token and Campaign ID
 
 1. Log in to [Patreon Portal](https://www.patreon.com/portal/registration/register-clients) and create a new client. You can name it anything you like.
-2. Retrieve your access token from the new client you just created.
+2. Note the access token from the new client you just created.
 3. Retrieve your campaign ID by running the following command in your terminal:
    ```
    curl -H "Authorization: Bearer <ACCESS_TOKEN>" \
@@ -26,18 +26,20 @@ Unlike `patreon-banner`, this project doesn't use OAuth2.0 but downloads the mem
    ```
    Look for the "id" field in the response (e.g., "id": "1234567").
 
-### 2. Install Dependencies
-    ```
-    npm install
-    ```   
-
-### 3. Set Up the Project
+### 3. Save Your Access Token and Campaign ID
 
 1. Create a `.env` file in the `config` directory with the following content:
    ```
    PATREON_ACCESS_TOKEN=your_access_token_here
    PATREON_CAMPAIGN_ID=your_campaign_id_here
    ```
+> [!NOTE]
+> Replace `your_access_token_here` and `your_campaign_id_here` with the values you obtained in the previous steps.
+
+### 2. Install Dependencies
+    ```
+    npm install
+    ```   
 
 ### 4. Fetch Members Data
 
