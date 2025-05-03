@@ -1,9 +1,0 @@
-# Netlify Build Configuration
-
-[build]
-  command = "npm run build"
-  publish = "app"
-
-[context.production.environment]
-  PATREON_ACCESS_TOKEN = "${PATREON_ACCESS_TOKEN}"
-  PATREON_CAMPAIGN_ID = "${PATREON_CAMPAIGN_ID}"
