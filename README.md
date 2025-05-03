@@ -1,4 +1,4 @@
-This is a simple web application that generates a banner displaying your Patreon members' names and profile pictures. The banner is designed to be used as an overlay on your streams.
+This is a simple web application that generates a scrolling banner displaying your Patreon members' names and profile pictures. The banner is designed to be used as an overlay on your streams.
 
 ![Patreon Banner](banner-screenshot.png)
 
