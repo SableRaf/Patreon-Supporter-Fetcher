@@ -11,9 +11,10 @@ console.log(`Fetching members for campaign ID:${process.env.PATREON_CAMPAIGN_ID}
 // Fetch one page of members, return combined data + next cursor
 async function fetchMembersPage(cursor = null) {
   const params = new URLSearchParams({
-    include:           'currently_entitled_tiers',
-    'fields[member]':  'full_name,email',
-    'fields[tier]':    'title'
+    include:           'currently_entitled_tiers,user',
+    'fields[member]':  'full_name,patron_status,pledge_relationship_start',
+    'fields[tier]':    'title',
+    'fields[user]':    'image_url,url'
   });
   if (cursor) params.set('page[cursor]', cursor);
 
@@ -43,10 +44,20 @@ async function getAllMembers(cursor = null, acc = []) {
     const tierTitle = tierIds.length
       ? tierMap[tierIds[0].id] ?? 'Unknown'
       : 'Free';
+
+    const user = json.included?.find(
+      obj => obj.type === 'user' && obj.id === member.relationships.user.data.id
+    );
+
     return {
-      name:  member.attributes.full_name,
-      email: member.attributes.email,
-      tier:  tierTitle
+      name: member.attributes.full_name,
+      tier: tierTitle,
+      imageUrl: user?.attributes.image_url || null,
+      thumbnailUrl: user?.attributes.image_url || null,
+      url: user?.attributes.url || null,
+      joinedDate: member.attributes.pledge_relationship_start
+        ? new Date(member.attributes.pledge_relationship_start)
+        : null
     };
   });
 
@@ -63,7 +74,32 @@ async function getAllMembers(cursor = null, acc = []) {
   try {
     const patrons = await getAllMembers();
     console.log(`Fetched ${patrons.length} patrons:`);
-    console.table(patrons);
+
+    // Separate free and non-free members
+    const freeMembers = patrons.filter(member => member.tier === "Free");
+    const nonFreeMembers = patrons.filter(member => member.tier !== "Free");
+
+    // Sort and log non-free members
+    const sortedNonFreeMembers = nonFreeMembers.sort((a, b) => a.tier.localeCompare(b.tier));
+    console.log("Non-Free Members:");
+    console.table(
+      sortedNonFreeMembers.map(({ name, tier, url, joinedDate }) => ({
+        name,
+        tier,
+        url,
+        joinedDate
+      }))
+    );
+
+    // Log free members
+    console.log("Free Members:");
+    console.table(
+      freeMembers.map(({ name, url, joinedDate }) => ({
+        name,
+        url,
+        joinedDate
+      }))
+    );
 
     // Save results to a JSON file
     fs.writeFileSync('members.json', JSON.stringify(patrons, null, 2), 'utf-8');
