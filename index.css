@@ -1,0 +1,33 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0; /* Remove margin to ensure flush alignment */
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+#members {
+  position: fixed; /* Make it fixed to stay at the top */
+  top: 0; /* Align flush to the top of the window */
+  left: 0; /* Align flush to the left */
+  width: 100%; /* Full width of the window */
+  height: var(--banner-height, 50px); /* Use CSS variable for banner height */
+  overflow: hidden;
+  background-color: rgb(235, 235, 235);
+}
+.member {
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+.member img {
+  width: calc(var(--banner-height, 50px) * 1); /* Image size proportional to banner height */
+  height: calc(var(--banner-height, 50px) * 1);
+  border-radius: 50%;
+}
+.member span {
+  font-size: calc(var(--banner-height, 50px) * 0.32); /* Text size proportional to banner height */
+  margin-left: calc(var(--banner-height, 50px) * 0.2);
+  margin-right: calc(var(--banner-height, 50px) * 0.3); /* Padding proportional to banner height */
+}
