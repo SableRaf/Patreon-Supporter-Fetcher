@@ -2,7 +2,7 @@ This is a simple web application that generates a scrolling banner displaying yo
 
 ![Patreon Banner](banner-screenshot.png)
 
-This project is inspired by [patreon-banner](https://github.com/AssistantApps/Patreon-Banner) project by [Kurt Lourens](https://github.com/Khaoz-Topsy) (now deprecated).
+This project is inspired by [patreon-banner](https://github.com/AssistantApps/Patreon-Banner)  by [Kurt Lourens](https://github.com/Khaoz-Topsy) (now deprecated).
 
 Unlike [patreon-banner](https://github.com/AssistantApps/Patreon-Banner), this project doesn't use OAuth2.0 but downloads the members' data directly from the Patreon API using a personal access token. You will need to create a new application in your Patreon account and get an access token. 
 
