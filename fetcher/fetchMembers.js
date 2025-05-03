@@ -7,7 +7,7 @@ const { createWriteStream } = require('fs');
 const https = require('https');
 
 // Ensure /data and /data/img directories exist
-const dataDir = path.join(__dirname, 'data');
+const dataDir = path.join(__dirname, '../data');
 const imgDir = path.join(dataDir, 'img');
 mkdirSync(dataDir, { recursive: true });
 mkdirSync(imgDir, { recursive: true });
