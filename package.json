@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "fetchMembers.js",
   "scripts": {
-    "fetch": "node fetchMembers.js",
+    "fetch": "cd scripts && node fetchMembers.js"
   },
   "keywords": [],
   "author": "",
