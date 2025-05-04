@@ -84,8 +84,9 @@ You can customize the banner's appearance and behavior by editing the following 
 const defaults = {
   scrollSpeed: 50, // Default scroll speed in pixels per second
   bannerHeight: 42, // Default banner height in pixels
+  paddingFactor: 0.15, // Padding as a factor of banner height
   backgroundColor: 'rgba(179, 179, 179, 0.246)', // Default banner background color
-  paddingFactor: 0.15 // Padding as a factor of banner height
+  textColor: 'rgb(33, 33, 33)' // Default text color
 }
 ```
 
@@ -97,11 +98,12 @@ You can also customize the banner's appearance using URL parameters. The followi
 - `bannerHeight`: Height of the banner in pixels
 - `paddingFactor`: Padding as a factor of banner height
 - `backgroundColor`: Banner background color (in rgba format)
+- `textColor`: Text color (in rgb format)
 
-For example, to set the scroll speed to 100 pixels per second and the background color to red, you can use the following URL:
+For example, to set the scroll speed to 100 pixels per second, the background color to red, and the text color to blue, you can use the following URL:
 
 ```
-http://your-netlify-site.netlify.app/?scrollSpeed=100&backgroundColor=rgba(255,0,0,0.5)
+http://your-netlify-site.netlify.app/?scrollSpeed=100&backgroundColor=rgba(255,0,0,0.5)&textColor=rgb(0,0,255)
 ```
 
 #### Deploy to Netlify

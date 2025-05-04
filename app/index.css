@@ -31,4 +31,5 @@ body {
   font-size: calc(var(--banner-height, 50px) * 0.32); /* Text size proportional to banner height */
   margin-left: calc(var(--banner-height, 50px) * 0.2);
   margin-right: calc(var(--banner-height, 50px) * 0.3); /* Padding proportional to banner height */
+  color: var(--text-color, #000000); /* Use the CSS variable for text color */
 }
