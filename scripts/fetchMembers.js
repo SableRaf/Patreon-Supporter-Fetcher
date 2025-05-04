@@ -10,8 +10,10 @@ const config = require('../config/config');
 // Ensure /data and /data/img directories exist
 const dataDir = config.dataDir;
 const imgDir = config.imgDir;
+const tierImgDir = path.join(imgDir, 'tiers');
 mkdirSync(dataDir, { recursive: true });
 mkdirSync(imgDir, { recursive: true });
+mkdirSync(tierImgDir, { recursive: true });
 
 // Download an image and save it locally
 async function downloadImage(url, filePath) {
@@ -43,7 +45,7 @@ async function fetchMembersPage(cursor = null) {
   const params = new URLSearchParams({
     include:           'currently_entitled_tiers,user',
     'fields[member]':  'full_name,patron_status,pledge_relationship_start',
-    'fields[tier]':    'title',
+    'fields[tier]':    'title,amount_cents,description,created_at,image_url',
     'fields[user]':    'image_url,url'
   });
   if (cursor) params.set('page[cursor]', cursor);
@@ -59,14 +61,27 @@ async function fetchMembersPage(cursor = null) {
 // Recursively page through all members
 async function getAllMembers(cursor = null, acc = [], skipImages = false) {
   const json = await fetchMembersPage(cursor);
-
-  // Build tier-ID → title map
-  const tierMap = (json.included || [])
+  
+  // Extract tier information including additional fields
+  const tiers = {};
+  (json.included || [])
     .filter(obj => obj.type === 'tier')
-    .reduce((m, tier) => {
-      m[tier.id] = tier.attributes.title;
-      return m;
-    }, {});
+    .forEach(tier => {
+      tiers[tier.id] = {
+        id: tier.id,
+        title: tier.attributes.title,
+        amountCents: tier.attributes.amount_cents,
+        description: tier.attributes.description,
+        createdAt: tier.attributes.created_at,
+        imageUrl: tier.attributes.image_url
+      };
+    });
+
+  // Build tier-ID → title map for backward compatibility
+  const tierMap = Object.entries(tiers).reduce((m, [id, tier]) => {
+    m[id] = tier.title;
+    return m;
+  }, {});
 
   // Map each member to a flat object
   const pageMembersPromises = (json.data || []).map(async (member) => {
@@ -74,6 +89,9 @@ async function getAllMembers(cursor = null, acc = [], skipImages = false) {
     const tierTitle = tierIds.length
       ? tierMap[tierIds[0].id] ?? 'Unknown'
       : 'Free';
+      
+    // Store tier ID for reference without storing the full tier details
+    const tierId = tierIds.length > 0 ? tierIds[0].id : null;
 
     const user = json.included?.find(
       obj => obj.type === 'user' && obj.id === member.relationships.user.data.id
@@ -98,6 +116,7 @@ async function getAllMembers(cursor = null, acc = [], skipImages = false) {
       userID: userId,
       name: member.attributes.full_name,
       tier: tierTitle,
+      tierId: tierId, // Store just the ID reference instead of the full details
       imageUrl,
       thumbnailFileName: skipImages ? null : localImageFileName,
       url: user?.attributes.url || null,
@@ -121,6 +140,9 @@ async function getAllMembers(cursor = null, acc = [], skipImages = false) {
     const skipImages = process.argv.includes('--skip-images'); // Check for optional argument
     const patrons = await getAllMembers(null, [], skipImages);
     console.log(`Fetched ${patrons.length} patrons:`);
+
+    // Keep track of all encountered tiers across all API requests
+    const allTiers = {};
 
     // Separate free and non-free members
     const freeMembers = patrons.filter(member => member.tier === "Free");
@@ -148,10 +170,56 @@ async function getAllMembers(cursor = null, acc = [], skipImages = false) {
       }))
     );
 
+    // We need to make a separate call to get all tier info since we're no longer storing it with members
+    // We'll reuse fetchMembersPage to get tier info
+    const firstPage = await fetchMembersPage();
+    
+    // Extract tier details from the included array
+    (firstPage.included || [])
+      .filter(obj => obj.type === 'tier')
+      .forEach(tier => {
+        allTiers[tier.id] = {
+          id: tier.id,
+          title: tier.attributes.title,
+          amountCents: tier.attributes.amount_cents,
+          description: tier.attributes.description,
+          createdAt: tier.attributes.created_at,
+          imageUrl: tier.attributes.image_url
+        };
+      });
+
+    // Download tier images if they exist
+    if (!skipImages) {
+      console.log("Downloading tier images...");
+      for (const tierId in allTiers) {
+        const tier = allTiers[tierId];
+        if (tier.imageUrl) {
+          const tierImageFileName = `${tier.id}.jpg`;
+          const tierImagePath = path.join(tierImgDir, tierImageFileName);
+          
+          try {
+            await downloadImage(tier.imageUrl, tierImagePath);
+            console.log(`Downloaded image for tier: ${tier.title}`);
+            
+            // Update the tier object to include the local file reference
+            tier.thumbnailFileName = `tiers/${tierImageFileName}`;
+          } catch (err) {
+            console.error(`Failed to download image for tier: ${tier.title}`, err);
+          }
+        }
+      }
+    }
+
+    // Convert to array and sort by amount (ascending)
+    const tiersArray = Object.values(allTiers).sort((a, b) => 
+      (a.amountCents || 0) - (b.amountCents || 0)
+    );
+
     // Save results to a JSON file
     const outputFilePath = path.join(dataDir, 'members.json');
     const outputData = {
-      lastFetchDate: new Date().toISOString(), // Add the last fetch date
+      lastFetchDate: new Date().toISOString(),
+      tiers: tiersArray, // Add all tier information to the output
       members: patrons
     };
     writeFileSync(outputFilePath, JSON.stringify(outputData, null, 2), 'utf-8');
