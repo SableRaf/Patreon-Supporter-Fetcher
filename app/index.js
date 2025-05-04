@@ -1,7 +1,8 @@
 const defaults = {
   scrollSpeed: 50, // Default scroll speed in pixels per second
-  bannerHeight: 42, // Default banner height in pixels
+  bannerHeight: 80, // Default banner height in pixels
   paddingFactor: 0.15, // Padding as a factor of banner height
+  fontSizeFactor: 0.32, // Default font size factor
   backgroundColor: 'rgba(179, 179, 179, 0.246)', // Default banner background color
   textColor: 'rgb(33, 33, 33)' // Default text color
 }
@@ -16,16 +17,22 @@ function getUrlParam(param, defaultValue) {
 const scrollSpeed = parseFloat(getUrlParam('scrollSpeed', defaults.scrollSpeed));
 const bannerHeight = parseInt(getUrlParam('bannerHeight', defaults.bannerHeight), 10);
 const paddingFactor = parseFloat(getUrlParam('paddingFactor', defaults.paddingFactor));
+const fontSizeFactor = parseFloat(getUrlParam('fontSizeFactor', defaults.fontSizeFactor));
 const backgroundColor = getUrlParam('backgroundColor', defaults.backgroundColor);
 const textColor = getUrlParam('textColor', defaults.textColor);
 
 const padding = bannerHeight * paddingFactor; // Calculate padding dynamically
+
+// Update font size calculation to use fontSizeFactor
+const fontSize = bannerHeight * fontSizeFactor;
+document.documentElement.style.setProperty('--font-size', `${fontSize}px`);
 
 // Set CSS variables for dynamic values
 document.documentElement.style.setProperty('--banner-height', `${bannerHeight}px`);
 document.documentElement.style.setProperty('--member-padding', `${padding}px`);
 document.documentElement.style.setProperty('--banner-bg', backgroundColor);
 document.documentElement.style.setProperty('--text-color', textColor);
+document.documentElement.style.setProperty('--font-size-factor', fontSizeFactor);
 
 const imgDir = `img`;
 

@@ -28,7 +28,7 @@ body {
   border-radius: 50%;
 }
 .member span {
-  font-size: calc(var(--banner-height, 50px) * 0.32); /* Text size proportional to banner height */
+  font-size: var(--font-size, 14px); /* Use the CSS variable for font size */
   margin-left: calc(var(--banner-height, 50px) * 0.2);
   margin-right: calc(var(--banner-height, 50px) * 0.3); /* Padding proportional to banner height */
   color: var(--text-color, #000000); /* Use the CSS variable for text color */
