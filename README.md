@@ -58,6 +58,17 @@ This script will:
 - retrieve a list of members and save it as `members.json` in `app/data`
 - download the members' profile images and save them in the `app/data/img` folder.
 
+### 5. Set Up Scheduled Builds on Netlify
+
+To ensure your banner stays up-to-date with the latest Patreon members, you can set up scheduled builds on Netlify using build hooks.
+
+1. Go to your Netlify site's settings and navigate to the **Build & Deploy** section.
+2. Under **Build Hooks**, create a new build hook. You can name it something like "Scheduled Build".
+3. Copy the generated URL for the build hook.
+4. Save the URL in your GitHub repository secrets as `NETLIFY_BUILD_HOOK_URL`.
+
+This setup will automatically trigger a build on Netlify at the specified schedule, ensuring your banner is always up-to-date.
+
 ## Local Testing
 
 1. Run `npm start` to start a local server. 
