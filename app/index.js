@@ -113,19 +113,17 @@ async function setup() {
         return newMember;
       });
 
-    const totalWidth = members.reduce((sum, member) => sum + member.width + padding, 0);
-    const largestMemberWidth = Math.max(...members.map(member => member.width));
+    let totalWidth = members.reduce((sum, member) => sum + member.width + padding, 0);
+    let largestMemberWidth = Math.max(...members.map(member => member.width));
 
-    // Duplicate members only if the total width is less than the container width
-    if (totalWidth < window.innerWidth) {
+    {
       const originalMembers = [...members];
-      while (xPosition < window.innerWidth) {
+      while (totalWidth < window.innerWidth) {
         for (const member of originalMembers) {
-          const duplicateMember = new Member(member.name, member.element.querySelector("img").src, xPosition);
-          xPosition += duplicateMember.width + padding;
+          const duplicateMember = new Member(member.name, member.element.querySelector("img").src, totalWidth);
+          totalWidth += duplicateMember.width + padding;
           members.push(duplicateMember);
-
-          if (xPosition - largestMemberWidth >= window.innerWidth) break; // Stop duplicating once the banner is filled
+          console.log(`Duplicated member: ${member.name}`);
         }
       }
     }
