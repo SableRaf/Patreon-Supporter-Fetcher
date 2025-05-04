@@ -1,13 +1,28 @@
-const scrollSpeed = 50;
-const bannerHeight = 42;
-const paddingFactor = 0.15; // Padding as a factor of banner height
-const backgroundColor = 'rgba(179, 179, 179, 0.246)'; // Set background color here
+const defaults = {
+  scrollSpeed: 50, // Default scroll speed in pixels per second
+  bannerHeight: 42, // Default banner height in pixels
+  backgroundColor: 'rgba(179, 179, 179, 0.246)', // Default banner background color
+  paddingFactor: 0.15 // Padding as a factor of banner height
+}
+
+// Function to get URL parameters
+function getUrlParam(param, defaultValue) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.has(param) ? urlParams.get(param) : defaultValue;
+}
+
+// Override default values with URI parameters
+const scrollSpeed = parseFloat(getUrlParam('scrollSpeed', defaults.scrollSpeed));
+const bannerHeight = parseInt(getUrlParam('bannerHeight', defaults.bannerHeight), 10);
+const backgroundColor = getUrlParam('backgroundColor', defaults.backgroundColor);
+const paddingFactor = parseFloat(getUrlParam('paddingFactor', defaults.paddingFactor));
 
 const padding = bannerHeight * paddingFactor; // Calculate padding dynamically
 
+// Set CSS variables for dynamic values
 document.documentElement.style.setProperty('--banner-height', `${bannerHeight}px`);
-document.documentElement.style.setProperty('--member-padding', `${padding}px`); // Set CSS variable for padding
-document.documentElement.style.setProperty('--banner-bg', backgroundColor); // Set CSS variable for background color
+document.documentElement.style.setProperty('--member-padding', `${padding}px`);
+document.documentElement.style.setProperty('--banner-bg', backgroundColor);
 
 const imgDir = `img`;
 

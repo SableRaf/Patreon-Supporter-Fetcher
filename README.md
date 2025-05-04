@@ -74,15 +74,34 @@ This setup will automatically trigger a build on Netlify at the specified schedu
 1. Run `npm start` to start a local server. 
 2. Open `http://localhost:3000` in your browser to see the banner.
 
-## Banner Customization Parameters
+## Banner Customization
+
+### Customize Default Settings
 
 You can customize the banner's appearance and behavior by editing the following variables at the top of `app/index.js`:
 
 ```javascript
-const scrollSpeed = 50; // Speed at which the banner scrolls (pixels per second)
-const bannerHeight = 42; // Height of the banner in pixels
-const paddingFactor = 0.15; // Padding as a factor of banner height
-const backgroundColor = 'rgba(179, 179, 179, 0.246)'; // Banner background color
+const defaults = {
+  scrollSpeed: 50, // Default scroll speed in pixels per second
+  bannerHeight: 42, // Default banner height in pixels
+  backgroundColor: 'rgba(179, 179, 179, 0.246)', // Default banner background color
+  paddingFactor: 0.15 // Padding as a factor of banner height
+}
+```
+
+### Customization via URL Parameters
+
+You can also customize the banner's appearance using URL parameters. The following parameters are supported:
+
+- `scrollSpeed`: Speed at which the banner scrolls (pixels per second)
+- `bannerHeight`: Height of the banner in pixels
+- `paddingFactor`: Padding as a factor of banner height
+- `backgroundColor`: Banner background color (in rgba format)
+
+For example, to set the scroll speed to 100 pixels per second and the background color to red, you can use the following URL:
+
+```
+http://your-netlify-site.netlify.app/?scrollSpeed=100&backgroundColor=rgba(255,0,0,0.5)
 ```
 
 #### Deploy to Netlify
