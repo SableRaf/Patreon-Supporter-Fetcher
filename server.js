@@ -13,6 +13,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(path.join(__dirname, 'app')));
+
+app.use('/list', express.static(path.join(__dirname, 'app', 'views', 'tierList')));
     
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
